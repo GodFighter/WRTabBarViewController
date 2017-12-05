@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name         = "WRTabBarViewController"
-s.version      = "1.1.2"
+s.version      = "1.1.3"
 s.summary      = "自定义选项卡"
 s.description  = "可以自定义选项卡高度，字体，颜色，凸起等"
 s.homepage     = "https://github.com/GodFighter/WRTabBarViewController.git"

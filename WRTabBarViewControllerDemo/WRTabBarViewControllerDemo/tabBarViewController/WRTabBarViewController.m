@@ -25,10 +25,10 @@
         _normalTitleColor = [UIColor colorWithWhite:0.7 alpha:1];
         _titleFont = [UIFont systemFontOfSize:12];
         _selectedTitleColor = [UIColor blueColor];
-
+        
         [self setupTitleTextAttributes];
         [self setupChildControllers];
-
+        
         WRTabBar *tabbar = [[WRTabBar alloc] initWithItems:itemsArray];
         tabbar.customDelegate = self;
         //kvc实质是修改了系统的_tabBar
@@ -49,7 +49,8 @@
 }
 #pragma mark - private
 - (void)setupTitleTextAttributes {
-    UITabBarItem *tabBarItem = [UITabBarItem appearanceWhenContainedInInstancesOfClasses:@[self.class]];
+    UITabBarItem *tabBarItem = [UITabBarItem appearanceWhenContainedIn:[UITabBar class], nil];
+    //    UITabBarItem *tabBarItem = [UITabBarItem appearanceWhenContainedInInstancesOfClasses:@[self.class]];
     
     NSMutableDictionary *dictNormal = [NSMutableDictionary dictionary];
     dictNormal[NSForegroundColorAttributeName] = self.normalTitleColor;
@@ -66,10 +67,10 @@
     for (NSInteger i = 0; i < self.itemsArray.count; i++) {
         WRTabBarItem *item = self.itemsArray[i];
         UIViewController *childViewController = [self childViewControllerWithItem:item];
-       
+        
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:childViewController];
         nav.view.backgroundColor = [UIColor blueColor];
-
+        
         if (item.iconImageName != nil) {
             UIImage *image = [UIImage imageNamed:item.iconImageName];
             // 始终绘制图片原始状态，不使用Tint Color
@@ -80,7 +81,7 @@
             UIImage *selectedImage = [UIImage imageNamed:item.iconSelectedImageName];
             selectedImage = [selectedImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
             childViewController.tabBarItem.selectedImage = selectedImage;
-
+            
         }
         if (item.title != nil) {
             childViewController.tabBarItem.title = item.title;
@@ -111,3 +112,4 @@
     [self setupTitleTextAttributes];
 }
 @end
+

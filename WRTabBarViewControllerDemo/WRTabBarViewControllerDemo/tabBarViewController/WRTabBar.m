@@ -11,6 +11,7 @@
 @interface WRTabBar ()
 
 @property (weak, nonatomic) UIButton *raisedButton; // 凸起按钮
+@property (strong, nonatomic) NSArray *itemsArray;
 
 @end
 
@@ -18,8 +19,12 @@
 
 - (instancetype)initWithItems:(NSArray <WRTabBarItem *> *)itemsArray {
     if (self = [super init]) {
-        self.backgroundColor = [UIColor whiteColor];
-
+        _itemsArray = itemsArray;
+        self.backgroundColor = [UIColor colorWithRed:((float)((0xf5f5f5 & 0xFF0000) >> 16))/255.0 green:((float)((0xf5f5f5 & 0xFF00) >> 8))/255.0 blue:((float)(0xf5f5f5 & 0xFF))/255.0 alpha:1.0];
+        
+        self.layer.borderWidth = .5;
+        self.layer.borderColor = [UIColor colorWithRed:((float)((0xb4b4b4 & 0xFF0000) >> 16))/255.0 green:((float)((0xb4b4b4 & 0xFF00) >> 8))/255.0 blue:((float)(0xb4b4b4 & 0xFF))/255.0 alpha:1.0].CGColor;
+        
         NSInteger i = 0;
         for (WRTabBarItem *item in itemsArray) {
             if (item.isRaisedItem == YES) {
@@ -40,17 +45,16 @@
 - (void)layoutSubviews  {
     [super layoutSubviews];
     
-    CGFloat width = self.frame.size.width / (self.subviews.count - 1);
+    CGFloat width = self.frame.size.width / self.itemsArray.count;
     int btnIndex = 0;
     
     for (UIView *button in self.subviews) {
         if ([button isKindOfClass:NSClassFromString(@"UITabBarButton")]) {
             CGFloat x = width * btnIndex;
-            btnIndex++;
-            if (self.raisedButton != nil && btnIndex == self.subviews.count / 2) {
-                btnIndex++;
+            if (self.raisedButton != nil && btnIndex == self.itemsArray.count / 2) {
                 button.hidden = YES;
             }
+            btnIndex++;
             button.frame = CGRectMake(x, button.frame.origin.y, width, button.frame.size.height);
         } else if ([button isEqual:self.raisedButton]) {
             self.raisedButton.frame = CGRectMake((self.frame.size.width - self.raisedButton.currentBackgroundImage.size.width) / 2,
@@ -91,3 +95,4 @@
 }
 
 @end
+

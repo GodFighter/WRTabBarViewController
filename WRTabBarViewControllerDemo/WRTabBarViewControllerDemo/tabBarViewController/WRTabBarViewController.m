@@ -49,8 +49,11 @@
 }
 #pragma mark - private
 - (void)setupTitleTextAttributes {
+#ifndef NSFoundationVersionNumber_iOS_9_0
     UITabBarItem *tabBarItem = [UITabBarItem appearanceWhenContainedIn:[UITabBar class], nil];
-    //    UITabBarItem *tabBarItem = [UITabBarItem appearanceWhenContainedInInstancesOfClasses:@[self.class]];
+#else
+    UITabBarItem *tabBarItem = [UITabBarItem appearanceWhenContainedInInstancesOfClasses:@[self.class]];
+#endif
     
     NSMutableDictionary *dictNormal = [NSMutableDictionary dictionary];
     dictNormal[NSForegroundColorAttributeName] = self.normalTitleColor;

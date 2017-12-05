@@ -49,11 +49,15 @@
 }
 #pragma mark - private
 - (void)setupTitleTextAttributes {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+
 #ifndef NSFoundationVersionNumber_iOS_9_0
     UITabBarItem *tabBarItem = [UITabBarItem appearanceWhenContainedIn:[UITabBar class], nil];
 #else
     UITabBarItem *tabBarItem = [UITabBarItem appearanceWhenContainedInInstancesOfClasses:@[self.class]];
 #endif
+#pragma clang diagnostic pop
 
     NSMutableDictionary *dictNormal = [NSMutableDictionary dictionary];
     dictNormal[NSForegroundColorAttributeName] = self.normalTitleColor;

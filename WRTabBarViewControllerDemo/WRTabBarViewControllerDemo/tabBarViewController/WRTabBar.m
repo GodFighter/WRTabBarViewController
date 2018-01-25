@@ -42,20 +42,34 @@
     }
     return self;
 }
-- (void)layoutSubviews  {
+- (void)updateItems:(NSArray <WRTabBarItem *> *)itemsArray {
+    _itemsArray = itemsArray;
+    [self setNeedsLayout];
+}
+- (void)layoutSubviews {
     [super layoutSubviews];
     
     CGFloat width = self.frame.size.width / self.itemsArray.count;
     int btnIndex = 0;
-    
+    CGFloat y = 0;
+
     for (UIView *button in self.subviews) {
         if ([button isKindOfClass:NSClassFromString(@"UITabBarButton")]) {
             CGFloat x = width * btnIndex;
             if (self.raisedButton != nil && btnIndex == self.itemsArray.count / 2) {
                 button.hidden = YES;
             }
+            NSString *title = [self.itemsArray[btnIndex] title];
+            if (title.length == 0 && y == 0) {
+                for (UIView *subview in button.subviews) {
+                    if ([subview isKindOfClass:NSClassFromString(@"UITabBarSwappableImageView")]) {
+                        y = (button.frame.size.height - subview.frame.size.height) / 2;
+                        break;
+                    }
+                }
+            }
             btnIndex++;
-            button.frame = CGRectMake(x, button.frame.origin.y, width, button.frame.size.height);
+            button.frame = CGRectMake(x, y, width, button.frame.size.height);
         } else if ([button isEqual:self.raisedButton]) {
             self.raisedButton.frame = CGRectMake((self.frame.size.width - self.raisedButton.currentBackgroundImage.size.width) / 2,
                                                  self.frame.size.height - self.raisedButton.currentBackgroundImage.size.height,

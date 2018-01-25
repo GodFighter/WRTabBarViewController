@@ -38,5 +38,7 @@
  * @param itemsArray 条目数组
  */
 - (instancetype)initWithItems:(NSArray <WRTabBarItem *> *)itemsArray;
+/** 更新items */
+- (void)updateItems:(NSArray <WRTabBarItem *> *)itemsArray;
 
 @end

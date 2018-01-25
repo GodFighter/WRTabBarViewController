@@ -47,6 +47,15 @@
     tabFrame.origin.y = self.view.frame.size.height - self.tabBarHeight;
     self.tabBar.frame = tabFrame;
 }
+- (void)updateItems:(NSArray <WRTabBarItem *> *)itemsArray {
+    self.itemsArray = itemsArray;
+    [self setupChildControllers];
+    
+    if ([self.tabBar isKindOfClass:WRTabBar.class]) {
+        WRTabBar *tabBar = (WRTabBar *)self.tabBar;
+        [tabBar updateItems:itemsArray];
+    }
+}
 #pragma mark - private
 - (void)setupTitleTextAttributes {
 #pragma clang diagnostic push
@@ -73,10 +82,16 @@
 - (void)setupChildControllers {
     for (NSInteger i = 0; i < self.itemsArray.count; i++) {
         WRTabBarItem *item = self.itemsArray[i];
-        UIViewController *childViewController = [self childViewControllerWithItem:item];
+        UIViewController *childViewController;
+        UINavigationController *nav;
         
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:childViewController];
-        nav.view.backgroundColor = [UIColor blueColor];
+        if (self.childViewControllers.count > i) {
+            childViewController = self.childViewControllers[i];
+        } else {
+            childViewController = [self childViewControllerWithItem:item];
+            nav = [[UINavigationController alloc] initWithRootViewController:childViewController];
+            nav.view.backgroundColor = [UIColor blueColor];
+        }
         
         if (item.iconImageName != nil) {
             UIImage *image = [UIImage imageNamed:item.iconImageName];
@@ -94,8 +109,10 @@
             childViewController.tabBarItem.title = item.title;
             childViewController.navigationItem.title = item.title;
         }
-        childViewController.navigationController.navigationBarHidden = item.navigationBarHidden;
-        [self addChildViewController:nav];
+        if (self.childViewControllers.count <= i) {
+            childViewController.navigationController.navigationBarHidden = item.navigationBarHidden;
+            [self addChildViewController:nav];
+        }
     }
 }
 - (UIViewController *)childViewControllerWithItem:(WRTabBarItem *)item {
